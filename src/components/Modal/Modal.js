@@ -1,5 +1,6 @@
-import ReactModal from 'react-modal';
-import { Overlay, Modal } from './Modal.Styled';
+// import ReactModal from 'react-modal';
+import { Audio } from 'react-loader-spinner';
+import { Modal } from './Modal.Styled';
 
 export const ModalWindow = ({
   isOpen,
@@ -30,6 +31,15 @@ export const ModalWindow = ({
             color: 'lightsteelblue',
           },
         }}
+      />
+      <Audio
+        height="80"
+        width="80"
+        radius="9"
+        color="green"
+        ariaLabel="three-dots-loading"
+        wrapperStyle
+        wrapperClass
       />
     </Modal>
   );
