@@ -4,8 +4,8 @@ import { Header, Form, Button, Label, Input } from './SearchBar.Styled';
 export const SearchBar = ({ onSubmit }) => {
   return (
     <Header>
-      <Form>
-        <Button type="submit" onClick={onSubmit}>
+      <Form onSubmit={onSubmit}>
+        <Button type="submit">
           <Label>Search</Label>
         </Button>
 

@@ -34,8 +34,11 @@ export class App extends Component {
       );
       try {
         this.setState({ loading: true, error: false });
+
+        const searchQuery = this.state.query.split('/');
+
         const { hits, totalHits } = await getImages(
-          this.state.query.slice(12),
+          searchQuery[1],
           this.state.page
         );
         if (hits.length === 0) {
@@ -93,7 +96,7 @@ export class App extends Component {
   };
 
   render() {
-    const { images, largeImageURL, tag } = this.state;
+    const { images, largeImageURL, tag, isModalOpen } = this.state;
     return (
       <>
         {/* Searchbar */}
@@ -108,8 +111,8 @@ export class App extends Component {
         </ImageGallery>
         <Button onClick={this.onLoadMore}>Load more</Button>
         <ModalWindow
-          isOpen={this.isModalOpen}
-          onRequestClose={this.closeModal}
+          isOpen={isModalOpen}
+          closeModal={this.closeModal}
           largeImageURL={largeImageURL}
           tag={tag}
         />
