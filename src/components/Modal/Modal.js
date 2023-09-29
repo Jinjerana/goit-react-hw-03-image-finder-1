@@ -1,5 +1,5 @@
 // import ReactModal from 'react-modal';
-import { Audio } from 'react-loader-spinner';
+
 import { Modal } from './Modal.Styled';
 
 export const ModalWindow = ({
