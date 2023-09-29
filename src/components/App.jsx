@@ -93,12 +93,12 @@ export class App extends Component {
   };
 
   render() {
-    const { images, isModalOpen, largeImageURL, tag } = this.state;
+    const { images, largeImageURL, tag } = this.state;
     return (
       <>
         {/* Searchbar */}
         <SearchBar onSubmit={this.onSubmit} />
-        <button onClick={this.onSubmit}>Load more</button>
+        {/* <button onClick={this.onSubmit}>Load more</button> */}
         <Loader />
         {/* Gallery */}
         <ImageGallery gallery={images} onImageClick={this.openModal}>
