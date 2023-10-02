@@ -13,7 +13,6 @@ export class App extends Component {
     images: [],
     query: '',
     page: 1,
-    totalHits: 0,
     largeImageURL: '',
     tag: '',
     isModalOpen: false,
@@ -38,11 +37,11 @@ export class App extends Component {
         );
         if (hits.length === 0) {
           Report.warning('You enter invalid Input. Try again.');
-        } else {
-          if (this.state.page === 1) {
-            Notify.success(`Hooray! We found ${totalHits} images.`);
-          }
         }
+        if (this.state.page === 1) {
+          Notify.success(`Hooray! We found ${totalHits} images.`);
+        }
+
         this.setState(prev => {
           return {
             images: [...prev.images, ...hits],
@@ -59,10 +58,11 @@ export class App extends Component {
     e.preventDefault();
 
     const searchQuery = e.target.query.value.toLowerCase().trim('');
-    if (!searchQuery)
-      Notify.failure(
+    if (!searchQuery) {
+      return Notify.failure(
         `Sorry, there are no images matching your search query. Please try again.`
       );
+    }
 
     this.setState({
       query: `${Date.now()}/${searchQuery}`,
