@@ -20,6 +20,7 @@ export class App extends Component {
     tag: '',
     value: '',
     isModalOpen: false,
+    visible: false,
   };
 
   async componentDidUpdate(_, prevState) {
@@ -99,16 +100,12 @@ export class App extends Component {
     const { images, largeImageURL, tag, isModalOpen } = this.state;
     return (
       <>
-        {/* Searchbar */}
         <SearchBar onSubmit={this.onSubmit} />
-        {/* <button onClick={this.onSubmit}>Load more</button> */}
-        <Loader />
-        {/* Gallery */}
-        <ImageGallery gallery={images} onImageClick={this.openModal}>
-          {/* {images.map(item => (
-            <li key={item.id}>{item.largeImage}</li>
-          ))} */}
-        </ImageGallery>
+        <Loader visible={this.state.visible} />
+        <ImageGallery
+          gallery={images}
+          onImageClick={this.openModal}
+        ></ImageGallery>
         <Button onClick={this.onLoadMore}>Load more</Button>
         <ModalWindow
           isOpen={isModalOpen}

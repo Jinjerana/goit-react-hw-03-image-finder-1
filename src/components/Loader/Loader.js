@@ -10,7 +10,6 @@ export const Loader = () => {
       ariaLabel="ball-triangle-loading"
       wrapperClass={{}}
       wrapperStyle=""
-      visible={true}
     />
   );
 };
