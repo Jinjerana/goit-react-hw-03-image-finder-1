@@ -5,36 +5,30 @@ import { ImageGallery } from './ImageGallery/ImageGallery.js';
 import { Button } from './Button/Button.js';
 import { Loader } from './Loader/Loader.js';
 import { ModalWindow } from './Modal/Modal.js';
+import { Report } from 'notiflix/build/notiflix-report-aio';
+import { Notify } from 'notiflix/build/notiflix-notify-aio';
 
 export class App extends Component {
-  // Объявляем стейт
   state = {
-    // Массив изображений
     images: [],
-    // Поисковой запрос
     query: '',
-    // Пагинация
     page: 1,
     totalHits: 0,
     largeImageURL: '',
     tag: '',
-    value: '',
     isModalOpen: false,
-    visible: false,
+    loading: false,
+    error: null,
+    loadMore: false,
   };
 
   async componentDidUpdate(_, prevState) {
-    // по стандарту делаем проверку
     if (
       prevState.query !== this.state.query ||
       prevState.page !== this.state.page
     ) {
-      // если изменился запрос, тут выполняется вся логика
-      console.log(
-        `fetch images by name ${this.state.query} and with page ${this.state.page}`
-      );
       try {
-        this.setState({ loading: true, error: false });
+        this.setState({ loading: true });
 
         const searchQuery = this.state.query.split('/');
 
@@ -43,10 +37,10 @@ export class App extends Component {
           this.state.page
         );
         if (hits.length === 0) {
-          return console.log('Try again');
+          Report.warning('You enter invalid Input. Try again.');
         } else {
           if (this.state.page === 1) {
-            console.log(`"${totalHits}" pictures are found`);
+            Notify.success(`Hooray! We found ${totalHits} images.`);
           }
         }
         this.setState(prev => {
@@ -61,13 +55,15 @@ export class App extends Component {
     }
   }
 
-  // изменяем состояние query, на что реагирует ComponenDidUpdate
   onSubmit = e => {
     e.preventDefault();
 
     const searchQuery = e.target.query.value.toLowerCase().trim('');
-    if (!searchQuery) return;
-    // скидываем при новом поиске страницу и галерею
+    if (!searchQuery)
+      Notify.failure(
+        `Sorry, there are no images matching your search query. Please try again.`
+      );
+
     this.setState({
       query: `${Date.now()}/${searchQuery}`,
       page: 1,
@@ -75,7 +71,6 @@ export class App extends Component {
     });
   };
 
-  // загрузка следующих фото
   onLoadMore = () => {
     this.setState(prev => ({ page: prev.page + 1 }));
   };
@@ -97,16 +92,19 @@ export class App extends Component {
   };
 
   render() {
-    const { images, largeImageURL, tag, isModalOpen } = this.state;
+    const { images, largeImageURL, tag, isModalOpen, loading, loadMore } =
+      this.state;
     return (
       <>
         <SearchBar onSubmit={this.onSubmit} />
-        <Loader visible={this.state.visible} />
-        <ImageGallery
-          gallery={images}
-          onImageClick={this.openModal}
-        ></ImageGallery>
-        <Button onClick={this.onLoadMore}>Load more</Button>
+        {loading && <Loader />}
+        {images.length > 0 && (
+          <ImageGallery
+            gallery={images}
+            onImageClick={this.openModal}
+          ></ImageGallery>
+        )}
+        {loadMore && <Button onClick={this.onLoadMore}>Load more</Button>}
         <ModalWindow
           isOpen={isModalOpen}
           closeModal={this.closeModal}
